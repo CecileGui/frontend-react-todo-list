@@ -12,7 +12,15 @@ export default class TodoApp extends Component{
     }
     
 move = (key) => {
-    console.log(key)
+    console.log("fonction move : " + key)
+    const { items } = this.state
+    const filtered = items.map((item) => {
+        if(item.key === key){
+            item.done = !item.done
+        }
+        return item
+    })
+    this.setState({items: filtered})
 }
 
     render(){
@@ -25,8 +33,13 @@ move = (key) => {
                         List Undone
                         <ul>
                             {
-                                items.map((item, index) => (
-                                    <li key={index} onClick={this.move(index)}>{item.text}</li>
+                                items.map((item) => (
+                                    <li 
+                                    key={item.key} 
+                                    onClick={() => this.move(item.key)}
+                                    >
+                                        {item.text}
+                                    </li>
                                 ))
                             }
                         </ul>

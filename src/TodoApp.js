@@ -51,6 +51,16 @@ export default class TodoApp extends Component{
         return result.length
     }
 
+    delet = key => {
+        const { items } = this.state
+        const filtered = items.filter((item) => {
+            if (item.key !== key) {
+                return item
+            }
+        })
+        this.setState({items : filtered})
+    }
+
     render(){
         const {items, input} = this.state
         return(
@@ -59,8 +69,6 @@ export default class TodoApp extends Component{
                 <div className="row">
                     <div className="col-md-6">
                         <div className="todolist">
-                        
-                        List Undone
                         <form onSubmit={(e) => this.add(e)}>
                             <input 
                                 className="form-control form-control-lg"
@@ -69,16 +77,23 @@ export default class TodoApp extends Component{
                                 onChange={(e) => this.handleChange(e)}>
 
                             </input>
+
+                            <br />
                         </form>
-                        <ul>
+                        <ul className="no-padding" id="not-done">
                             {
                                 items.map((item) => (
-                                !item.done && (
-                                    <li 
+                                (!item.done) && (
+                                    <li
+                                    className="list-unstyled"  
                                     key={item.key} 
-                                    onClick={() => this.move(item.key)}
+                                    
                                     >
-                                        {item.text}
+                                        <label
+                                            onClick={() => this.move(item.key)}>
+                                                {item.text}
+                                        </label>
+                                        
                                     </li>)    
                                     
                                 ))
@@ -90,20 +105,24 @@ export default class TodoApp extends Component{
                         </div>
                     </div>
                     <div className="col-md-6">
-                        <div className="todolist">
-                        List Done
-                        
-                        <ul>
+                        <div className="todolist">                       
+                        <ul className="no-padding"
+                            id="done-items">
                             {
                                 items.map((item) => (
                                 item.done && (
                                     
-                                    <li 
+                                    <li
+                                    className="list-unstyled" 
                                     key={item.key} 
-                                    onClick={() => this.move(item.key)}
+                                    
                                     >
-                                        {item.text}
-                                        <i className="fa fa-trash"></i>
+                                        <label onClick={() => this.move(item.key)}>{item.text}</label>
+                                        <button 
+                                        className="btn float-right"
+                                        onClick={ e => this.delet(item.key)}>
+                                            <i className="fa fa-trash"></i>
+                                        </button>
                                     </li>)    
                                     
                                 ))

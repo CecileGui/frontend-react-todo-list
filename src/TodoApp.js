@@ -65,6 +65,9 @@ export default class TodoApp extends Component{
         const {items, input} = this.state
         return(
             <div className="container">
+                <nav class="navbar navbar-dark bg-dark">
+                    <span class="navbar-brand mb-0 h1">ToDo App</span>
+                </nav>
                 <br/>
                 <div className="row">
                     <div className="col-md-6">

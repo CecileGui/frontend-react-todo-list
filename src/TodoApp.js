@@ -34,12 +34,14 @@ move = (key) => {
                         <ul>
                             {
                                 items.map((item) => (
+                                !item.done && (
                                     <li 
                                     key={item.key} 
                                     onClick={() => this.move(item.key)}
                                     >
                                         {item.text}
-                                    </li>
+                                    </li>)    
+                                    
                                 ))
                             }
                         </ul>
@@ -47,7 +49,18 @@ move = (key) => {
                     <div className="col-md-6">
                         List Done
                         <ul>
-                            
+                            {
+                                items.map((item) => (
+                                item.done && (
+                                    <li 
+                                    key={item.key} 
+                                    onClick={() => this.move(item.key)}
+                                    >
+                                        {item.text}
+                                    </li>)    
+                                    
+                                ))
+                            }
                         </ul>
                     </div>
                 </div>

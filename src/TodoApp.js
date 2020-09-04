@@ -26,6 +26,18 @@ export default class TodoApp extends Component{
         })
         this.setState({items: filtered})
     }
+    
+    componentDidMount() {
+        this.fetch()
+    }
+
+    fetch = () => {
+        aXios.get('http://localhost:4000/todos/')
+        .then(res => {
+            console.log(res.data)
+            this.setState({items: res.data})
+        })
+    }
 
     add = (e) => {
         console.log("fonction add")
@@ -39,6 +51,7 @@ export default class TodoApp extends Component{
             .then(res => {
                 console.log(res.data)
                 console.log('success')
+                this.fetch()
             })
             e.target.value = ''
         

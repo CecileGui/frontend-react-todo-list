@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
+import aXios from 'axios'
 import './Todo.css'
+
 
 export default class TodoApp extends Component{
 
@@ -26,8 +28,20 @@ export default class TodoApp extends Component{
     }
 
     add = (e) => {
+        console.log("fonction add")
         const {items} = this.state
         e.preventDefault()
+        
+            
+            let todo = {text: this.state.input, done :false}
+            console.log('todo vaut : ' + todo)
+            aXios.post('http://localhost:4000/todos/add', todo) // récupéré côté serveur via le body de la requête
+            .then(res => {
+                console.log(res.data)
+                console.log('success')
+            })
+            e.target.value = ''
+        
         const newItem= {text: this.state.input, done :false, key: new Date().getMilliseconds()}
         this.setState({items: [ ...[newItem], ...items]})
         
@@ -65,8 +79,8 @@ export default class TodoApp extends Component{
         const {items, input} = this.state
         return(
             <div className="container">
-                <nav class="navbar navbar-dark bg-dark">
-                    <span class="navbar-brand mb-0 h1">ToDo App</span>
+                <nav className="navbar navbar-dark bg-dark">
+                    <span className="navbar-brand mb-0 h1">ToDo App</span>
                 </nav>
                 <br/>
                 <div className="row">

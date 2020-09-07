@@ -1,10 +1,16 @@
 import React, {Component} from 'react'
-import aXios from 'axios'
+import aXios from 'axios' // aide à la transcription http
 import './Todo.css'
 
-
+/**
+ * Composant représentant une Todo List
+ */
 export default class TodoApp extends Component{
 
+    /**
+     * Etat initial de la Todo List
+     * TODO: Supprimer car plus utile, les todos sont récupérés en DB
+     */
     state = {
         items: [
             {text: "Item #1", done: false, key: new Date().getMilliseconds() + "item1"},
@@ -15,9 +21,18 @@ export default class TodoApp extends Component{
         input: ''
     }
     
+    /**
+     * Déplace un item
+     * De à faire vers fait ou inversement
+     * @param {*} key élément unique qui désigne l'élément à déplacer
+     * les items modifiés sont enregistrés dans l'état local
+     * 
+     */
     move = (key) => {
         console.log("fonction move : " + key)
         const { items } = this.state
+        
+        // 
         const filtered = items.map((item) => {
             if(item.key === key){
                 item.done = !item.done
@@ -27,19 +42,31 @@ export default class TodoApp extends Component{
         this.setState({items: filtered})
     }
 
+    /**
+     * Après le montage du composant Todo List
+     * Récupére les todos en base de données
+     */
     componentDidMount() {
         this.fetch()
     }
 
+    /**
+     * va récupérer les todos et les stocke dans l'état local
+     */
     fetch = () => {
         aXios.get('http://localhost:4000/todos/')
         .then(res => {
             console.log(res.data)
             this.setState({items: res.data})
-            // TODO : récupérer les id et les stocker dans key
+            // TODO: récupérer les id et les stocker dans key
         })
     }
 
+    /**
+     * Récupère le texte saisi en input
+     * Génère un todo {text: text saisi, done false}, l'enregistre en BDD, met à jour l'état local en allant chercher les todos en BDD
+     * @param {*} e : submission du formulaire d'ajout de todo
+     */
     add = (e) => {
         console.log("fonction add")
         const {items} = this.state
@@ -55,16 +82,24 @@ export default class TodoApp extends Component{
                 this.fetch()
             })
             e.target.value = ''
-        
+
+        // TODO: retirer
         const newItem= {text: this.state.input, done :false, key: new Date().getMilliseconds()}
         this.setState({items: [ ...[newItem], ...items]})
         
     }
 
+    /**
+     * Met à jour le champ input de l'état local, permettant d'avoir accès à ce qui est en train d'être saisi via l'état local
+     * @param {*} e :onChange de l'input de saisie de nouveau todo
+     */
     handleChange = (e) => {
         this.setState({input: e.target.value})
     }
 
+    /**
+     * @returns le nombre de tâches qu'il rest à effectuer
+     */
     getUndoneLength(){
         const result = []
         const {items} = this.state
@@ -79,6 +114,10 @@ export default class TodoApp extends Component{
         return result.length
     }
 
+    /**
+     * Appelée lors de l'appui sur un bouton de suppression
+     * @param {*} key : id unique du todo à supprimer en BDD
+     */
     delet = key => {
         const { items } = this.state
         const filtered = items.filter((item) => {

@@ -9,7 +9,7 @@ export default class TodoApp extends Component{
 
     /**
      * Etat initial de la Todo List
-     *
+     * TODO: définir un objet item
      */
     state = {
         items: [],
@@ -24,18 +24,20 @@ export default class TodoApp extends Component{
      * 
      */
     move = (key) => {
-        console.log("fonction move : " + key)
-        const { items } = this.state
-        
-        // 
-        const filtered = items.map((item) => {
+        console.log("fonction move : " + key)       
+        this.state.items.map((item) => {
             if(item.key === key){
-                item.done = !item.done
-                // TODO: update de l'item en DB
+                let itemToUpdate = { key: item.key, text: item.text, done: (!item.done) }
+                aXios.put('http://localhost:4000/todos/'+key, itemToUpdate).then((res) => {
+                    this.fetch()
+                })
+                
+                return
             }
-            return item
+            //return item
+            console.log("sortie move")
         })
-        this.setState({items: filtered})
+        
     }
 
     /**
@@ -43,6 +45,7 @@ export default class TodoApp extends Component{
      * Récupére les todos en base de données
      */
     componentDidMount() {
+        console.log("thiscomponentDidMount")
         this.fetch()
     }
 
@@ -50,15 +53,18 @@ export default class TodoApp extends Component{
      * va récupérer les todos et les stocke dans l'état local
      */
     fetch = () => {
+        console.log("FETCH")
         aXios.get('http://localhost:4000/todos/')
         .then(res => {
-            console.log(res.data)
             const rawItems = res.data
             const items = []
             rawItems.forEach(item => {
                 items.push({text: item.text, done: item.done, key: item._id})
             });
             this.setState({items: items})
+            console.log("etat après fetch : ")
+            this.state.items.map((item) => console.log(item))
+            
             
         })
     }
@@ -66,7 +72,7 @@ export default class TodoApp extends Component{
     /**
      * Récupère le texte saisi en input
      * Génère un todo {text: text saisi, done false}, l'enregistre en BDD, met à jour l'état local en allant chercher les todos en BDD
-     * @param {*} e : submission du formulaire d'ajout de todo
+     * @param {*} e : submission du formulaire d'ajout de todo // TODO: e inutile, à virer
      */
     add = (e) => {
         console.log("fonction add")     

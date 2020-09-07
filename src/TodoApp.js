@@ -9,15 +9,10 @@ export default class TodoApp extends Component{
 
     /**
      * Etat initial de la Todo List
-     * TODO: Supprimer car plus utile, les todos sont récupérés en DB
+     *
      */
     state = {
-        items: [
-            {text: "Item #1", done: false, key: new Date().getMilliseconds() + "item1"},
-            {text: "Item #2", done: false, key: new Date().getMilliseconds() + "item2"},
-            {text: "Item #3", done: false, key: new Date().getMilliseconds() + "item3"},
-            {text: "Item #4", done: false, key: new Date().getMilliseconds() + "item4"},
-        ],
+        items: [],
         input: ''
     }
     
@@ -36,6 +31,7 @@ export default class TodoApp extends Component{
         const filtered = items.map((item) => {
             if(item.key === key){
                 item.done = !item.done
+                // TODO: update de l'item en DB
             }
             return item
         })
@@ -57,8 +53,13 @@ export default class TodoApp extends Component{
         aXios.get('http://localhost:4000/todos/')
         .then(res => {
             console.log(res.data)
-            this.setState({items: res.data})
-            // TODO: récupérer les id et les stocker dans key
+            const rawItems = res.data
+            const items = []
+            rawItems.forEach(item => {
+                items.push({text: item.text, done: item.done, key: item._id})
+            });
+            this.setState({items: items})
+            
         })
     }
 
@@ -68,25 +69,15 @@ export default class TodoApp extends Component{
      * @param {*} e : submission du formulaire d'ajout de todo
      */
     add = (e) => {
-        console.log("fonction add")
-        const {items} = this.state
-        e.preventDefault()
-        
-            
+        console.log("fonction add")     
             let todo = {text: this.state.input, done :false}
-            console.log('todo vaut : ' + todo)
             aXios.post('http://localhost:4000/todos/add', todo) // récupéré côté serveur via le body de la requête
             .then(res => {
                 console.log(res.data)
                 console.log('success')
                 this.fetch()
-            })
-            e.target.value = ''
-
-        // TODO: retirer
-        const newItem= {text: this.state.input, done :false, key: new Date().getMilliseconds()}
-        this.setState({items: [ ...[newItem], ...items]})
-        
+                
+            })       
     }
 
     /**

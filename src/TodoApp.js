@@ -26,7 +26,7 @@ export default class TodoApp extends Component{
         })
         this.setState({items: filtered})
     }
-    
+
     componentDidMount() {
         this.fetch()
     }
@@ -36,6 +36,7 @@ export default class TodoApp extends Component{
         .then(res => {
             console.log(res.data)
             this.setState({items: res.data})
+            // TODO : récupérer les id et les stocker dans key
         })
     }
 

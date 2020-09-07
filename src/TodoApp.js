@@ -116,13 +116,10 @@ export default class TodoApp extends Component{
      * @param {*} key : id unique du todo à supprimer en BDD
      */
     delet = key => {
-        const { items } = this.state
-        const filtered = items.filter((item) => {
-            if (item.key !== key) {
-                return item
-            }
-        })
-        this.setState({items : filtered})
+        aXios.delete('http://localhost:4000/todos/'+key)
+            .then((res) => {
+                this.fetch()
+            })
     }
 
     render(){

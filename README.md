@@ -1,3 +1,11 @@
+### Description
+L'application est composée de deux colonnes. Chaque colonne est constituées de lignes, une ligne affiche la descritpion d'un tâche à effectuer.  
+**Colonne de gauche : tâches à effectuer**  
+On peut ajouter une tâche à effectuer (todo) via l'input texte. Elle apparait alors dans la colonne, qui contient toutes les tâches à effectuer.  
+**Colonne de droite : liste des tâches terminées**  
+Pour marquer une tâche comme terminée, la faire glisser de la colonne de droite vers la colonne de gauche.
+Une fois une tache marquée comme terminée, il est possible de la supprimer en cliquant sur le bouton supprimer en bout de ligne.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

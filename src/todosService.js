@@ -28,6 +28,14 @@ export default async function getAll()  {
  */
 export async function serviceAdd(todo) {
     aXios.post('http://localhost:4000/todos/add', todo)
-        .catch(err => console.log("error"))
+        .catch(err => console.log(err))
 }    
 
+/**
+ * fait appel au serveur pour supprimer un todo en DB
+ * @param {*} key : id du todo à supprimer
+ */
+export async function serviceDelete(key) {
+    aXios.delete('http://localhost:4000/todos/'+key)
+        .catch(err => console.log(err))
+}

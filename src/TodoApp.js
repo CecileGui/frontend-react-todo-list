@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import aXios from 'axios' // aide à la transcription http
 import './Todo.css'
-import getAll, { serviceAdd } from './todosService.js'
+import getAll, { serviceAdd, serviceDelete } from './todosService.js'
 
 /**
  * Composant représentant une Todo List
@@ -63,7 +63,6 @@ export default function TodoApp() {
     /**
      * Récupère le texte saisi en input
      * Génère un todo {text: text saisi, done false}, l'enregistre en BDD, met à jour l'état local en allant chercher les todos en BDD
-     * @param {*} e : submission du formulaire d'ajout de todo // TODO: e inutile, à virer
      */
     async function add() {
         console.log("FONCTION ADD DECLENCHE SUBMISSION !!!!!!!!!!!!!!!!!!!!!!!!!!")     
@@ -102,12 +101,10 @@ export default function TodoApp() {
      * Appelée lors de l'appui sur un bouton de suppression
      * @param {*} key : id unique du todo à supprimer en BDD
      */
-    function delet(key) {
+    async function delet(key) {
         console.log("delete")
-        aXios.delete('http://localhost:4000/todos/'+key)
-            .then((res) => {
-                fetch()
-            })
+        await serviceDelete(key)
+        fetch()
     }
 
     

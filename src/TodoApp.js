@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import aXios from 'axios' // aide à la transcription http
 import './Todo.css'
-import './Services'
+import getAll from './todosService.js'
 
 /**
  * Composant représentant une Todo List
  */
-export default function TodoApp () {
+export default function TodoApp() {
 
     /**
      * Etat initial de la Todo List
@@ -18,10 +18,14 @@ export default function TodoApp () {
     /**
      * Après le montage du composant Todo List
      * Récupére les todos en base de données
+     * [input] est passé en argument pour éviter d'entrer dans une boucle infinie render -> récupérer données ->
+     * maj useState -> render etc...
+     * React ne n'appliquera l'effet si input n'a pas changé
+     * TODO: trouver une meilleure solution
      */
     useEffect(() => {
         fetch()
-    })
+    }, [input])
 
     /**
      * Déplace un item
@@ -37,32 +41,23 @@ export default function TodoApp () {
                 let itemToUpdate = { key: item.key, text: item.text, done: (!item.done) }
                 aXios.put('http://localhost:4000/todos/'+key, itemToUpdate).then((res) => {
                     fetch()
-                })
-                
+                })             
                 return
             }
             //return item
             console.log("sortie move")
-        })
-        
+        })       
     }
 
     /**
-     * va récupérer les todos et les stocke dans l'état local
+     * Fait appel au service todosService
+     * va récupérer les todos et les stock dans items
      */
-    function fetch() {
-        console.log("FETCH")
-        aXios.get('http://localhost:4000/todos/')
-        .then(res => {
-            const rawItems = res.data
-            const dealtItems = []
-            rawItems.forEach(item => {
-                dealtItems.push({text: item.text, done: item.done, key: item._id})
-            });
-            setItems(dealtItems)
-            console.log("etat après fetch : ")
-            items.map((item) => console.log(item))           
-        })
+    async function fetch() {
+        console.log("FETCH, fait appel service getAll")
+        const stock =  await getAll();
+        setItems(stock)
+        console.log("FIN FETCH")
     }
 
     /**
@@ -87,6 +82,7 @@ export default function TodoApp () {
      * @param {*} e :onChange de l'input de saisie de nouveau todo
      */
     function handleChange(e) {
+        console.log("handleChange")
         setInput(e.target.value)
     }
 
@@ -94,6 +90,7 @@ export default function TodoApp () {
      * @returns le nombre de tâches qu'il rest à effectuer
      */
     function getUndoneLength(){
+        console.log("getUndoneLength")
         const result = []
         
         items.map((item) => {
@@ -112,6 +109,7 @@ export default function TodoApp () {
      * @param {*} key : id unique du todo à supprimer en BDD
      */
     function delet(key) {
+        console.log("delete")
         aXios.delete('http://localhost:4000/todos/'+key)
             .then((res) => {
                 fetch()
@@ -141,7 +139,7 @@ export default function TodoApp () {
                             <br />
                         </form>
                         <ul className="no-padding" id="not-done">
-                            {
+                            {   (items.length > 0 ) &&                            
                                 items.map((item) => (
                                     (!item.done) && (
                                         <li

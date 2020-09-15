@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import aXios from 'axios' // aide à la transcription http
 import './Todo.css'
-import getAll from './todosService.js'
+import getAll, { serviceAdd } from './todosService.js'
 
 /**
  * Composant représentant une Todo List
@@ -65,16 +65,10 @@ export default function TodoApp() {
      * Génère un todo {text: text saisi, done false}, l'enregistre en BDD, met à jour l'état local en allant chercher les todos en BDD
      * @param {*} e : submission du formulaire d'ajout de todo // TODO: e inutile, à virer
      */
-    function add(e) {
-        console.log("fonction add")     
+    async function add() {
+        console.log("FONCTION ADD DECLENCHE SUBMISSION !!!!!!!!!!!!!!!!!!!!!!!!!!")     
         let todo = {text: input, done :false}
-        aXios.post('http://localhost:4000/todos/add', todo) // récupéré côté serveur via le body de la requête
-            .then(res => {
-                console.log(res.data)
-                console.log('success')
-                fetch()
-                
-            })       
+        await serviceAdd(todo)    
     }
 
     /**
@@ -127,7 +121,7 @@ export default function TodoApp() {
             <div className="row">
                 <div className="col-md-6">
                     <div className="todolist">
-                        <form onSubmit={(e) => add(e)}>
+                        <form onSubmit={(e) => add()}>
                             <input
                                 className="form-control form-control-lg"
                                 placeholder="add todo"

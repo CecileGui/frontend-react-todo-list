@@ -21,6 +21,13 @@ export default async function getAll()  {
         }) 
          
 }
-    
-    
+
+/**
+ * fait appel au serveur pour ajouter le todo en DB
+ * @param {*} todo 
+ */
+export async function serviceAdd(todo) {
+    aXios.post('http://localhost:4000/todos/add', todo)
+        .catch(err => console.log("error"))
+}    
 

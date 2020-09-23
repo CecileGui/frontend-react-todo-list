@@ -3,6 +3,7 @@ import aXios from 'axios' // aide à la transcription http
 import './Todo.css'
 import ListUndone from './components/ListUndone'
 import getAll, { serviceAdd, serviceDelete, serviceUpdate } from './todosService.js'
+import ListDone from './components/ListDone'
 
 /**
  * Composant représentant une Todo List
@@ -104,7 +105,7 @@ export default function TodoApp() {
      * Appelée lors de l'appui sur un bouton de suppression
      * @param {*} key : id unique du todo à supprimer en BDD
      */
-    async function delet(key) {
+    const delet = async (key) => {
         console.log("delete")
         await serviceDelete(key)
         fetch()
@@ -146,28 +147,14 @@ export default function TodoApp() {
                 </div>
                 <div className="col-md-6">
                     <div className="todolist">
-                        <ul className="no-padding"
-                            id="done-items">
-                            {
-                                items.map((item) => (
-                                    item.done && (
-
-                                        <li
-                                            className="list-unstyled"
-                                            key={item.key}
-
-                                        >
-                                            <label onClick={() => move(item.key)}>{item.text}</label>
-                                            <button
-                                                className="btn float-right"
-                                                onClick={e => delet(item.key)}>
-                                                <i className="fa fa-trash"></i>
-                                            </button>
-                                        </li>)
-
-                                ))
-                            }
-                        </ul>
+                        <ListDone 
+                            items = {items}
+                            styleUl = 'no-padding'
+                            styleLi= 'list-unstyled'
+                            id = 'done-items'
+                            moveOnClick = {move}
+                            deletOnCick = {delet}
+                        />
                     </div>
                 </div>
             </div>

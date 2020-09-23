@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import aXios from 'axios' // aide à la transcription http
 import './Todo.css'
+import ListUndone from './components/ListUndone'
 import getAll, { serviceAdd, serviceDelete, serviceUpdate } from './todosService.js'
 
 /**
@@ -34,7 +35,7 @@ export default function TodoApp() {
      * les items modifiés sont enregistrés dans l'état local
      * 
      */
-   async function move(key) {
+    const move = async (key) => {
         console.log("fonction move : " + key)
         let found = false
         let itemToUpdate = {}  
@@ -131,25 +132,13 @@ export default function TodoApp() {
 
                             <br />
                         </form>
-                        <ul className="no-padding" id="not-done">
-                            {   (items.length > 0 ) &&                            
-                                items.map((item) => (
-                                    (!item.done) && (
-                                        <li
-                                            className="list-unstyled"
-                                            key={item.key}
-
-                                        >
-                                            <label
-                                                onClick={() => move(item.key)}>
-                                                {item.text}
-                                            </label>
-
-                                        </li>)
-
-                                ))
-                            }
-                        </ul>
+                        <ListUndone 
+                            items = {items}
+                            styleUl = 'no-padding'
+                            styleLi= 'list-unstyled'
+                            id = 'not-done'
+                            moveOnClick = {move}
+                        />
                         <div className="todo-footer">
                             <span>{getUndoneLength()}</span> Items Left
                         </div>

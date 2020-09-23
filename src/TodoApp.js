@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import aXios from 'axios' // aide à la transcription http
 import './Todo.css'
-import getAll, { serviceAdd, serviceDelete } from './todosService.js'
+import getAll, { serviceAdd, serviceDelete, serviceUpdate } from './todosService.js'
 
 /**
  * Composant représentant une Todo List
@@ -34,19 +34,21 @@ export default function TodoApp() {
      * les items modifiés sont enregistrés dans l'état local
      * 
      */
-   function move(key) {
-        console.log("fonction move : " + key)       
-        items.map((item) => {
-            if(item.key === key){
-                let itemToUpdate = { key: item.key, text: item.text, done: (!item.done) }
-                aXios.put('http://localhost:4000/todos/'+key, itemToUpdate).then((res) => {
-                    fetch()
-                })             
-                return
-            }
-            //return item
-            console.log("sortie move")
-        })       
+   async function move(key) {
+        console.log("fonction move : " + key)
+        let found = false
+        let itemToUpdate = {}  
+        items.forEach(item => {
+            if(item.key === key && !found){
+                itemToUpdate = { key: item.key, text: item.text, done: (!item.done) }                        
+                found = true
+            } 
+        });  
+
+        console.log("Item to update : " + itemToUpdate)
+        await serviceUpdate(key, itemToUpdate)
+        await fetch()
+        console.log("sortie move")       
     }
 
     /**
@@ -65,7 +67,7 @@ export default function TodoApp() {
      * Génère un todo {text: text saisi, done false}, l'enregistre en BDD, met à jour l'état local en allant chercher les todos en BDD
      */
     async function add() {
-        console.log("FONCTION ADD DECLENCHE SUBMISSION !!!!!!!!!!!!!!!!!!!!!!!!!!")     
+        console.log("FONCTION ADD DECLENCHE SUBMISSION ")     
         let todo = {text: input, done :false}
         await serviceAdd(todo)    
     }

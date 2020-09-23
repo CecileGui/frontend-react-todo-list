@@ -27,6 +27,7 @@ export default async function getAll()  {
  * @param {*} todo 
  */
 export async function serviceAdd(todo) {
+    console.log("SERVICE ADD")
     aXios.post('http://localhost:4000/todos/add', todo)
         .catch(err => console.log(err))
 }    
@@ -36,6 +37,27 @@ export async function serviceAdd(todo) {
  * @param {*} key : id du todo à supprimer
  */
 export async function serviceDelete(key) {
-    aXios.delete('http://localhost:4000/todos/'+key)
+    console.log("SERVICE DELETE")
+    await(
+        aXios.delete('http://localhost:4000/todos/'+key)
         .catch(err => console.log(err))
+    )
+    
+}
+
+/**
+ * Fait appel au serveur pour mette à jour un todo
+ * @param {} key id du todo à mettre à jour
+ * @param {*} todo nouvelle valeur du todo
+ */
+export async function serviceUpdate(key, todo) {
+    console.log("SERVICE UPDATE")
+    
+    //Le thread de requètes asynchrones ne peut pas passer à une autre requète tant que celle-ci n'est pas terminée
+    await (aXios.put('http://localhost:4000/todos/' + key, todo)
+            .then(res => {
+            return res.body
+            })
+            .catch(err => console.log(err))
+    )
 }

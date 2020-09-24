@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import aXios from 'axios' // aide à la transcription http
 import './Todo.css'
 import ListUndone from './components/ListUndone'
 import getAll, { serviceAdd, serviceDelete, serviceUpdate } from './todosService.js'
@@ -84,21 +83,15 @@ export default function TodoApp() {
     }
 
     /**
-     * @returns le nombre de tâches qu'il rest à effectuer
+     * @returns le nombre de tâches qu'il reste à effectuer, ou ne retourne rien si il en reste 0
      */
     function getUndoneLength(){
         console.log("getUndoneLength")
-        const result = []
-        
-        items.map((item) => {
-            if (!item.done) {
-                result.push(item)
-            }
-        })
-        if (result.length === 0) {
+        let itemsFiltered = items.filter(item => !item.done)
+        if (itemsFiltered.length === 0) {
             return
         }
-        return result.length
+        return itemsFiltered.length
     }
 
     /**

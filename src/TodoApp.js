@@ -23,14 +23,13 @@ export default function TodoApp() {
     /**
      * Après le montage du composant Todo List
      * Récupére les todos en base de données
-     * [input] est passé en argument pour éviter d'entrer dans une boucle infinie render -> récupérer données ->
-     * maj useState -> render etc...
+     * [] en argument => onMount
      * React ne n'appliquera l'effet si input n'a pas changé
      * TODO: trouver une meilleure solution
      */
     useEffect(() => {
         fetch()
-    }, [input])
+    }, [])
 
     /**
      * Déplace un item
@@ -140,11 +139,11 @@ export default function TodoApp() {
                                 <UndoneLeft
                                 undoneQuantity = {getUndoneLength()}
                                 />
-                            }
-                            
-                        
+                            }                        
                     </div>
                 </div>
+
+
                 <div className="col-md-6">
                     <div className="todolist">
                         <ListDone 

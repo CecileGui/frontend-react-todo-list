@@ -1,11 +1,17 @@
 import aXios from 'axios' // aide à la transcription http
+import { serverList } from './configuration/serverProperties'
 
 /**
- * fait appel au serveur (localhost:4000) pour aller récupérer les todos en base de données
- */    
+ * url du serveur permettant d'accéder à la base de données
+ */
+const url = `${serverList.localhost.url}:${serverList.localhost.port}`
+const keyResource = 'todos'
+/**
+ * fait appel au serveur pour aller récupérer les todos en base de données
+ */  
 export default async function getAll()  {
     console.log("SERVICE GET ALL")
-    return aXios.get('http://localhost:4000/todos/')
+    return aXios.get(`${url}/${keyResource}/`)
         .then(res => {
             const rawItems = res.data
             const items = []
@@ -28,7 +34,7 @@ export default async function getAll()  {
  */
 export async function serviceAdd(todo) {
     console.log("SERVICE ADD")
-    aXios.post('http://localhost:4000/todos/add', todo)
+    aXios.post(`${url}/${keyResource}/add`, todo)
         .catch(err => console.log(err))
 }    
 
@@ -39,7 +45,7 @@ export async function serviceAdd(todo) {
 export async function serviceDelete(key) {
     console.log("SERVICE DELETE")
     await(
-        aXios.delete('http://localhost:4000/todos/'+key)
+        aXios.delete(`${url}/${keyResource}/` + key)
         .catch(err => console.log(err))
     )
     
@@ -54,7 +60,7 @@ export async function serviceUpdate(key, todo) {
     console.log("SERVICE UPDATE")
     
     //Le thread de requètes asynchrones ne peut pas passer à une autre requète tant que celle-ci n'est pas terminée
-    await (aXios.put('http://localhost:4000/todos/' + key, todo)
+    await (aXios.put(`${url}/${keyResource}/` + key, todo)
             .then(res => {
             return res.body
             })

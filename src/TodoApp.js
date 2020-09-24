@@ -40,16 +40,8 @@ export default function TodoApp() {
      */
     const move = async (key) => {
         console.log("fonction move : " + key)
-        let found = false
-        let itemToUpdate = {}  
-        items.forEach(item => {
-            if(item.key === key && !found){
-                itemToUpdate = { key: item.key, text: item.text, done: (!item.done) }                        
-                found = true
-            } 
-        });  
-
-        console.log("Item to update : " + itemToUpdate)
+        let itemToUpdate = items.find(item => item.key === key)
+        itemToUpdate.done = !itemToUpdate.done
         await serviceUpdate(key, itemToUpdate)
         await fetch()
         console.log("sortie move")       

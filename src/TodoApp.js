@@ -48,9 +48,6 @@ export default function TodoApp() {
         }else{
             throw 'tried to update a todo but wrong id'
         }
-        
-        
-        
         console.log("sortie move")       
     }
 
@@ -89,8 +86,7 @@ export default function TodoApp() {
      */
     function getUndoneLength(){
         console.log("getUndoneLength")
-        let itemsFiltered = items.filter(item => !item.done)
-        return itemsFiltered.length
+        return items.filter(item => !item.done).length
     }
 
     /**

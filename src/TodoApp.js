@@ -41,9 +41,16 @@ export default function TodoApp() {
     const move = async (key) => {
         console.log("fonction move : " + key)
         let itemToUpdate = items.find(item => item.key === key)
-        itemToUpdate.done = !itemToUpdate.done
-        await serviceUpdate(key, itemToUpdate)
-        await fetch()
+        if(itemToUpdate){
+            itemToUpdate.done = !itemToUpdate.done
+            await serviceUpdate(key, itemToUpdate)
+            await fetch()
+        }else{
+            throw 'tried to update a todo but wrong id'
+        }
+        
+        
+        
         console.log("sortie move")       
     }
 

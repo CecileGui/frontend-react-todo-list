@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react'
+
 import './Todo.css'
-import ListUndone from './components/ListUndone'
+
 import getAll, { serviceAdd, serviceDelete, serviceUpdate } from './todosService.js'
+
+import ListUndone from './components/ListUndone'
 import ListDone from './components/ListDone'
+import UndoneLeft from './components/UndoneLeft'
 
 /**
  * Composant représentant une Todo List
@@ -83,14 +87,11 @@ export default function TodoApp() {
     }
 
     /**
-     * @returns le nombre de tâches qu'il reste à effectuer, ou ne retourne rien si il en reste 0
+     * @returns le nombre de tâches qu'il reste à effectuer
      */
     function getUndoneLength(){
         console.log("getUndoneLength")
         let itemsFiltered = items.filter(item => !item.done)
-        if (itemsFiltered.length === 0) {
-            return
-        }
         return itemsFiltered.length
     }
 
@@ -133,9 +134,15 @@ export default function TodoApp() {
                             id = 'not-done'
                             moveOnClick = {move}
                         />
-                        <div className="todo-footer">
-                            <span>{getUndoneLength()}</span> Items Left
-                        </div>
+                        
+                            {
+                                getUndoneLength() !== 0 &&
+                                <UndoneLeft
+                                undoneQuantity = {getUndoneLength()}
+                                />
+                            }
+                            
+                        
                     </div>
                 </div>
                 <div className="col-md-6">

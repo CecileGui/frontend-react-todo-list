@@ -77,17 +77,17 @@ export default function useTodosList() {
 			if (resultTodos) {
 				setTodos(resultTodos);
 			}
-			setDoneTodos(todos.filter((todo) => todo.done));
-			setDoingTodos(todos.filter((todo) => !todo.done));
-			setFetching(false);
+			setDoneTodos(resultTodos.filter((todo) => todo.done));
+			setDoingTodos(resultTodos.filter((todo) => !todo.done));
 
 			console.log('FIN FETCH');
 		};
 
 		if (fetching) {
+			setFetching(false);
 			fetchTodos();
 		}
-	}, [fetching, todos]);
+	}, [fetching]);
 
 	return { doneTodos, doingTodos, doFetch, addTodo, deleteTodo, moveTodo };
 }

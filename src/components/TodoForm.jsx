@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function TodoForm({ input, setInput, addTodo }) {
+function TodoForm({ addTodo }) {
+	const [input, setInput] = useState('');
+
 	/**
 	 * Met à jour le champ input de l'état local, permettant d'avoir accès à ce qui est en train d'être saisi via l'état local
 	 * @param {*} e :onChange de l'input de saisie de nouveau todo

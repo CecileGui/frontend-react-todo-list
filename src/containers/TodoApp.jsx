@@ -10,14 +10,13 @@ import TodoForm from '../components/TodoForm.jsx';
  * Composant représentant une Todo List
  */
 export default function TodoApp() {
-	const [input, setInput] = useState('');
 	const { doneTodos, doingTodos, addTodo, deleteTodo, moveTodo } = useTodosList();
 
 	return (
 		<div className="row">
 			<div className="col-md-6">
 				<div className="todolist">
-					<TodoForm input={input} addTodo={addTodo} setInput={setInput} />
+					<TodoForm addTodo={addTodo} />
 					<br />
 					<TodosList todos={doingTodos} id="not-done" moveOnClick={moveTodo} />
 
@@ -26,7 +25,7 @@ export default function TodoApp() {
 			</div>
 
 			<div className="col-md-6">
-				<TodosList todos={doneTodos} id="not-done" moveOnClick={moveTodo} deleteOnClick={deleteTodo} />
+				<TodosList todos={doneTodos} id="done-items" moveOnClick={moveTodo} deleteOnClick={deleteTodo} />
 			</div>
 		</div>
 	);
